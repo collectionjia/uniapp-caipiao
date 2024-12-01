@@ -1,0 +1,13 @@
+{
+  "name": "uniapp-diygw",
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": "",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4"
+  }
+}

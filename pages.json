@@ -1,0 +1,60 @@
+{
+	"pages": [
+		{
+			"path": "pages/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationBarBackgroundColor": "#07c160",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/ft",
+			"style": {
+				"navigationBarTitleText": "飞艇",
+				"navigationBarBackgroundColor": "#07c160",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/sc",
+			"style": {
+				"navigationBarTitleText": "赛车",
+				"navigationBarBackgroundColor": "#07c160",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/webview",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/forecast",
+			"style": {
+				"navigationBarTitleText": "预测"
+			}
+		},{
+			"path": "pages/forecast10",
+			"style": {
+				"navigationBarTitleText": "飞艇10测预测"
+			}
+		},{
+			"path": "pages/forecast10jieguo",
+			"style": {
+				"navigationBarTitleText": "飞艇10测预测结果"
+			}
+		},{
+			"path": "pages/forecast11",
+			"style": {
+				"navigationBarTitleText": "赛车10测预测"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "彩票百分比app",
+		"navigationBarBackgroundColor": "#07c160"
+	}
+}
