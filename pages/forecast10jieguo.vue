@@ -101,13 +101,13 @@
 					onceNumFocus: false,
 					countNumFocus: false,
 					suanfatypeDatas: [
-							{ value: '无', label: '无', checked: true },
-							{ value: '随机数生成算法', label: '随机数生成算法', checked: false },
-							{ value: '赔率计算算法', label: '赔率计算算法', checked: false },
-							{ value: '数据分析算法', label: '数据分析算法', checked: false },
-							{ value: '时间序列分析', label: '时间序列分析算法', checked: false },
-							{ value: '支持向量机算法', label: '支持向量机算法', checked: false },
-							{ value: '回报率优化算法', label: '回报率优化算法', checked: false }
+							{ value: '1', label: '阿基米德', checked: true },
+							{ value: '2', label: '高斯', checked: false },
+							{ value: '3', label: '祖冲之', checked: false },
+							{ value: '4', label: '希尔伯特', checked: false },
+							{ value: '5', label: '莱布尼茨', checked: false },
+							{ value: '6', label: '图灵', checked: false },
+							{ value: '7', label: '乔布斯', checked: false }
 						],
 					lushuDatas: [
 						{ value: '1', label: '1' },
