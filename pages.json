@@ -46,6 +46,11 @@
 				"navigationBarTitleText": "飞艇10测预测结果"
 			}
 		},{
+			"path": "pages/forecast10jieguo67",
+			"style": {
+				"navigationBarTitleText": "赛车10测预测结果"
+			}
+		},{
 			"path": "pages/forecast11",
 			"style": {
 				"navigationBarTitleText": "赛车10测预测"

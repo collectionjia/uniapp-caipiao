@@ -1,34 +1,64 @@
 <template>
 	<view class="container container329009">
+		
 		<u-form :model="form" :rules="formRules" :errorType="['message', 'toast']" ref="formRef" class="flex diygw-form diygw-col-24">
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否打开预测：" prop="isopen">
-				<view class="flex diygw-col-24">
-					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isopen" slot="right"></u-switch>
-				</view>
-			</u-form-item>
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否打开投注：" prop="isTouzhu">
-				<view class="flex diygw-col-24">
-					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isTouzhu" slot="right"></u-switch>
-				</view>
-			</u-form-item>
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否根据预算做关闭：" prop="isColseByMoney">
-				<view class="flex diygw-col-24">
-					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isColseByMoney" slot="right"></u-switch>
-				</view>
-			</u-form-item>
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="本钱：" prop="initmoney">
-				<u-input :focus="formData.initmoney" placeholder="请输入整数" v-model="form.initmoney"></u-input>
-			</u-form-item>
 			
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否根据次数投注关闭：" prop="isColseByCount">
-				<view class="flex diygw-col-24">
-					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isColseByCount" slot="right"></u-switch>
-				</view>
-			</u-form-item>
-			<u-form-item labelWidth="auto" class="diygw-col-24" label="几次不中关闭：" prop="nocount">
-				<u-input :focus="formData.nocount" placeholder="请输入整数" v-model="form.nocount"></u-input>
-			</u-form-item>
+			<view class="flex flex-direction-column flex-sub diygw-col-24">
+					<view class="flex flex-direction-column flex-sub">
+						<view @tap="changeCollapse" data-index="0" class="diygw-text-md padding flex solid-bottom" :class="[collapseDatas[0].isShow ? 'text-cur ' : '']">
+							<view class="flex-sub"> 开关设置 </view>
+							<i class="diy-icon-unfold diy-collapse-icon" :class="[collapseDatas[0].isShow ? 'diy-collapse-active' : '']"></i>
+						</view>
+					<view v-if="collapseDatas[0].isShow" class="solid-bottom">
+  
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="是否根据预算做关闭：" prop="isColseByMoney">
+						<view class="flex diygw-col-24">
+							<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isColseByMoney" slot="right"></u-switch>
+						</view>
+					</u-form-item>
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="本钱：" prop="initmoney">
+						<u-input :focus="formData.initmoney" placeholder="请输入整数" v-model="form.initmoney"></u-input>
+					</u-form-item>
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="小范围：" prop="mincost">
+						<u-input :focus="formData.mincost" placeholder="请输入整数" v-model="form.mincost"></u-input>
+					</u-form-item>
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="大范围：" prop="maxcost">
+						<u-input :focus="formData.maxcost" placeholder="请输入整数" v-model="form.maxcost"></u-input>
+					</u-form-item>
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="是否根据次数投注关闭：" prop="isColseByCount">
+						<view class="flex diygw-col-24">
+							<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isColseByCount" slot="right"></u-switch>
+						</view>
+					</u-form-item>
+					<u-form-item labelWidth="auto" class="diygw-col-24" label="几次不中关闭：" prop="nocount">
+						<u-input :focus="formData.nocount" placeholder="请输入整数" v-model="form.nocount"></u-input>
+					</u-form-item>
+						</view>
+					</view>
 			
+				<view class="flex flex-direction-column flex-sub">
+					<view @tap="changeCollapse" data-index="1" class="diygw-text-md padding flex solid-bottom" :class="[collapseDatas[1].isShow ? 'text-cur ' : '']">
+						<view class="flex-sub"> 算法设置 </view>
+						<i class="diy-icon-unfold diy-collapse-icon" :class="[collapseDatas[1].isShow ? 'diy-collapse-active' : '']"></i>
+					</view>
+						<view v-if="collapseDatas[1].isShow" class="solid-bottom">
+								<u-form-item class="diygw-col-24 diygw-form-item-top" label="算法类型" prop="suanfatype">
+									<u-radio-group class="flex flex-wrap diygw-col-24 flex-direction-column justify-between" wrapClass="flex-direction-column justify-between" v-model="form.suanfatype">
+										<u-radio shape="circle" v-for="(suanfatypeitem, suanfatypeindex) in formData.suanfatypeDatas" :key="suanfatypeindex" :name="suanfatypeitem.value">
+											{{ suanfatypeitem.label }}
+										</u-radio>
+									</u-radio-group>
+								</u-form-item>
+						</view>
+				</view>
+			
+			
+				<view class="flex flex-direction-column flex-sub">
+								<view @tap="changeCollapse" data-index="2" class="diygw-text-md padding flex solid-bottom" :class="[collapseDatas[2].isShow ? 'text-cur ' : '']">
+									<view class="flex-sub"> 参数设置 </view>
+									<i class="diy-icon-unfold diy-collapse-icon" :class="[collapseDatas[2].isShow ? 'diy-collapse-active' : '']"></i>
+								</view>
+								<view v-if="collapseDatas[2].isShow" class="solid-bottom">
 			
 			<u-form-item labelWidth="auto" class="diygw-col-24" label="最新期数获取：" prop="qishu">
 				<u-input :focus="formData.qishuFocus" placeholder="请输入整数" v-model="form.qishu"></u-input>
@@ -42,12 +72,21 @@
 			<u-form-item labelWidth="auto" class="diygw-col-24" label="每次投注几个号：" prop="countZu">
 				<u-input :focus="formData.countZuFocus" placeholder="请输入整数" v-model="form.countZu"></u-input>
 			</u-form-item>
-			<u-form-item class="diygw-col-24 diygw-form-item-top" label="算法类型" prop="suanfatype">
-				<u-radio-group class="flex flex-wrap diygw-col-24 flex-direction-column justify-between" wrapClass="flex-direction-column justify-between" v-model="form.suanfatype">
-					<u-radio shape="circle" v-for="(suanfatypeitem, suanfatypeindex) in formData.suanfatypeDatas" :key="suanfatypeindex" :name="suanfatypeitem.value">
-						{{ suanfatypeitem.label }}
-					</u-radio>
-				</u-radio-group>
+			
+			
+			</view>
+			</view>
+			</view>
+			
+			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否打开预测：" prop="isopen">
+				<view class="flex diygw-col-24">
+					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isopen" slot="right"></u-switch>
+				</view>
+			</u-form-item>
+			<u-form-item labelWidth="auto" class="diygw-col-24" label="是否打开投注：" prop="isTouzhu">
+				<view class="flex diygw-col-24">
+					<u-switch :size="44" :activeValue="true" :inactiveValue="false" inactiveTextColor="#000000" activeTextColor="#ffffff" v-model="form.isTouzhu" slot="right"></u-switch>
+				</view>
 			</u-form-item>
 			<u-form-item class="diygw-col-24" label="路数" prop="lushu">
 				<u-checkbox-group class="flex flex-wrap diygw-col-24 justify-start" wrapClass=" justify-start" v-model="form.lushu">
@@ -56,14 +95,25 @@
 					</u-checkbox>
 				</u-checkbox-group>
 			</u-form-item>
+			<u-form-item class="diygw-col-24" label="投注组数" prop="duozu">
+				<u-input :focus="formData.duozuFocus" placeholder="请输入投注组数" v-model="form.duozu"></u-input>
+			</u-form-item>
 			<u-form-item class="diygw-col-24" label="投注金额" prop="createmoney">
 				<u-input :focus="formData.createmoneyFocus" placeholder="请输入投注金额" v-model="form.createmoney"></u-input>
 			</u-form-item>
+			
 			<button class="diygw-col-24 btn-clz diygw-btn-default" @click="submitForm">提 交</button>
 		</u-form>
-		<button class="diygw-col-24 btn-clz diygw-btn-default" @click="resultContent" style="margin-top: 20px;" >刷新结果</button>
-		<rich-text :nodes="text1" class="diygw-col-24 text1-clz text-black" style="height: 100px;margin-top: 20px;">   </rich-text>
-		<button class="diygw-col-24 red btn1-clz diygw-btn-default"  @click="truncateResult">清空结果</button>
+		
+		<view class="flex flex-wrap diygw-col-24 justify-between">
+						<button class="diygw-col-8 btn2-clz diygw-btn-default" @click="resultContent">结果刷新</button>
+						<button class="diygw-col-8 red btn1-clz diygw-btn-default"  @click="truncateResult">清空结果</button>
+					</view>
+		
+		<!-- <button class="diygw-col-24 btn-clz diygw-btn-default" @click="resultContent" style="margin-top: 20px;" >刷新结果</button>
+		<button class="diygw-col-24 red btn1-clz diygw-btn-default"  @click="truncateResult">清空结果</button> -->
+		<rich-text :nodes="text1" class="diygw-col-24 text1-clz text-black" style="height: 100px;margin-top: 20px;font-size: 30x;">   </rich-text>
+		
 		<view class="clearfix"></view>
 	</view>
 </template>
@@ -77,6 +127,11 @@
 				 intervalId: null,
 				//页面传参
 				globalOption: {},
+				collapseDatas: [
+					{ text: '开关设置', isShow: false },
+					{ text: '算法设置', isShow: false },
+					{ text: '参数设置', isShow: false }
+					],
 				//自定义全局变量
 				globalData: {},
 				text1:'显示内容',
@@ -90,9 +145,12 @@
 					countNum: '',
 					countZu: '',
 					initmoney:'',
+					mincost:'',
+					maxcost:'',
 					nocount:'',
 					suanfatype: '无',
 					lushu: [],
+					duozu:'',
 					createmoney: '1'
 				},
 				formRules: {},
@@ -147,6 +205,13 @@
 				await this.initResetform();
  
 			},
+		changeCollapse(evt) {
+					let { index } = evt.currentTarget.dataset;
+					let collapseDatas = this.collapseDatas;
+	
+					collapseDatas[index]['isShow'] = !collapseDatas[index]['isShow'];
+					this.setData({ collapseDatas });
+				},
 			initResetform() { 
 				
 				// this.initform = JSON.stringify(this.form);
@@ -183,14 +248,18 @@
 							this.form.isColseByMoney=infostr.isColseByMoney;
 							this.form.isColseByCount=infostr.isColseByCount;
 							this.form.initmoney=infostr.initmoney;
+							this.form.mincost=infostr.mincost;
+							this.form.maxcost=infostr.maxcost;
 							this.form.nocount=infostr.nocount;
+							this.form.duozu=infostr.duozu;
+							
 							
 						}
 						 
 						
 						this.interval = setInterval(() => {
 								this.resultContent();
-						}, 5000); // 每秒执行一次
+						}, 2000); // 每秒执行一次
 						
 						
 					} else {
@@ -263,27 +332,38 @@
 </script>
 
 <style lang="scss" scoped>
-	.btn-clz {
-		background-color: #07c160;
-		padding-top: 20rpx;
-		color: #fff;
-		padding-left: 20rpx;
-		padding-bottom: 20rpx;
-		text-align: center;
-		padding-right: 20rpx;
-	}
-	.text-clz {
-		line-height: 16;
-	}
-	.btn1-clz {
-		background-color: #07c160;
-		padding-top: 20rpx;
-		color: #fff;
-		padding-left: 20rpx;
-		padding-bottom: 20rpx;
-		text-align: center;
-		padding-right: 20rpx;
-	}
-	.container329009 {
-	}
+			.btn-clz {
+				background-color: #07c160;
+				padding-top: 20rpx;
+				color: #fff;
+				padding-left: 20rpx;
+				padding-bottom: 20rpx;
+				text-align: center;
+				padding-right: 20rpx;
+			}
+			.btn2-clz {
+				background-color: #0762f7;
+				padding-top: 20rpx;
+				color: #fff;
+				padding-left: 20rpx;
+				padding-bottom: 20rpx;
+				text-align: center;
+				padding-right: 20rpx;
+			}
+			.btn1-clz {
+				background-color: #07c160;
+				padding-top: 20rpx;
+				color: #fff;
+				padding-left: 20rpx;
+				padding-bottom: 20rpx;
+				text-align: center;
+				padding-right: 20rpx;
+			}
+			.text1-clz {
+				font-size: 20px;
+				line-height: 1.5;
+				word-wrap: break-word;
+			}
+			.container329009 {
+			}
 </style>

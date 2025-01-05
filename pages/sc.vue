@@ -14,14 +14,18 @@
 				登录
 			</view>
 			&nbsp;&nbsp;
-			<view @click="handleyuce"
+			<view @click="handlexiazhu"
 				style="border-radius: 10upx;background: #519eff;color: #fff;text-align: center;padding: 20upx 60upx;display: inline-block;">
 				预测
 			</view>&nbsp;&nbsp;
-			<view @click="navto"
+			<!-- <view @click="handleyuce"
+				style="border-radius: 10upx;background: #519eff;color: #fff;text-align: center;padding: 20upx 60upx;display: inline-block;">
+				预测
+			</view>&nbsp;&nbsp; -->
+			<!-- <view @click="navto"
 				style="border-radius: 10upx;background: #519eff;color: #fff;text-align: center;padding: 20upx 60upx;display: inline-block;">
 				10次预测
-			</view>
+			</view> -->
 		</view>
 		<view class="countDown" style="text-align: center;font-size: 30upx;" v-if="count > -1">
 			倒计时：
@@ -148,6 +152,11 @@
 			handleyuce() {
 				uni.navigateTo({
 					url: '/pages/forecast'
+				})
+			},
+			handlexiazhu() {
+				uni.navigateTo({
+					url: '/pages/forecast10jieguo67'
 				})
 			},
 			setContent() {
