@@ -38,22 +38,22 @@
 		},{
 			"path": "pages/forecast10",
 			"style": {
-				"navigationBarTitleText": "飞艇10测预测"
+				"navigationBarTitleText": "飞艇"
 			}
 		},{
 			"path": "pages/forecast10jieguo",
 			"style": {
-				"navigationBarTitleText": "飞艇10测预测结果"
+				"navigationBarTitleText": "飞艇"
 			}
 		},{
 			"path": "pages/forecast10jieguo67",
 			"style": {
-				"navigationBarTitleText": "赛车10测预测结果"
+				"navigationBarTitleText": "赛车"
 			}
 		},{
 			"path": "pages/forecast11",
 			"style": {
-				"navigationBarTitleText": "赛车10测预测"
+				"navigationBarTitleText": "赛车"
 			}
 		}
 	],

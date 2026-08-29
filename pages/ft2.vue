@@ -4,23 +4,20 @@
 			titleColor="inherit" bgColor="green" :backTextStyle="{ color: 'inherit' }" :isHome="true" :isBack="true">
 			<template v-slot:title> 赛道概率预测 </template>
 		</u-navbar>
-		<view style="padding-top: 20upx;padding-left: 20upx;" :style="{color: online ? '#519eff': 'red'}">
-			{{online ? '用户在线' : '用户不在线'}}
-		</view>
-		<view style="text-align: center;padding: 20upx;box-sizing: border-box;">
-			<input type="text" v-model="token" />
-			<view @click="updateToken"
-				style="border-radius: 10upx;background: #519eff;color: #fff;text-align: center;padding: 20upx 60upx;display: inline-block;">
-				登录
+		<view class="page-body">
+			<view class="status-bar" :class="online ? 'status-online' : 'status-offline'">
+				<view class="status-dot"></view>
+				<text>{{ online ? '用户在线' : '用户不在线' }}</text>
 			</view>
-		</view>
-		<view class="countDown" style="text-align: center;font-size: 30upx;" v-if="count > -1">
-			倒计时：
-			<text :style="{'color': count <= 5 ? 'red': '#333'}">
-				{{count}}s
-			</text>
-		</view>
-		<view class="flex flex-wrap diygw-col-24 flex-direction-column">
+			<view class="login-card">
+				<input type="text" class="token-input" v-model="token" placeholder="请输入 Token" />
+				<view class="login-btn" @click="updateToken">登录</view>
+			</view>
+			<view class="countdown-card" v-if="count > -1">
+				<text class="countdown-label">倒计时</text>
+				<text class="countdown-value" :class="{ 'countdown-urgent': count <= 5 }">{{ count }}s</text>
+			</view>
+			<view class="flex flex-wrap diygw-col-24 flex-direction-column">
 			<view class="flex flex-wrap diygw-col-24 flex-direction-column flex4-clz">
 				<view class="flex flex-wrap diygw-col-24 items-center flex8-clz">
 					<view class="flex flex-wrap diygw-col-0 flex-direction-column flex9-clz">
@@ -29,7 +26,7 @@
 					<view class="diygw-col-0 text5-clz">(100期最新一期){{histroyOne}}</view>
 				</view>
 				<view class="flex flex-wrap diygw-col-24 flex-direction-column flex10-clz">
-					<rich-text :nodes="text8" class="diygw-col-24"></rich-text>
+					<result-table :headers="statTable.headers" :rows="statTable.rows" minCellWidth="120rpx" />
 				</view>
 			</view>
 			<!-- <view class="flex flex-wrap diygw-col-24 flex-direction-column flex11-clz">
@@ -54,13 +51,20 @@
 					<rich-text :nodes="text17" class="diygw-col-24"></rich-text>
 				</view>
 			</view> -->
+			</view>
 		</view>
 		<view class="clearfix"></view>
 	</view>
 </template>
 
 <script>
+	import { buildStatTable } from '@/common/StringTableParser.js';
+	import ResultTable from '@/components/result-table/result-table.vue';
+
 	export default {
+		components: {
+			ResultTable
+		},
 		data() {
 			return {
 				token: '0c46fb5c2f8c4f3a8c8b6cf93b5e8b0c1713335295591',
@@ -74,9 +78,10 @@
 					logintype: '0',
 					agree: '0'
 				},
-				text8: '',
-				text11: '',
-				text17: '',
+				statTable: {
+					headers: ['赛道', '期数', '号码', '概率'],
+					rows: []
+				},
 				histroyOne: '',
 				count: -1
 			};
@@ -122,49 +127,7 @@
 				this.init(20, (res) => {
 					this.init(50, (res2) => {
 						this.init(100, (res3) => {
-							this.text8 = ''
-							res.data.forEach((item, index) => {
-								this.text8 +=
-									`<div style="padding: 5px 0;font-weight:bold;">赛道${item.index+1} 概率</div>`
-								let cStr = '<span style="font-weight:bold;">20期</span>【'
-								item.stat.forEach(v => {
-									if (v.willRate > 95) {
-										cStr +=
-											`<span style="color: #e03e2d;margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									} else {
-										cStr +=
-											`<span style="margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									}
-								})
-								cStr += '】<br/>'
-
-								cStr += '<span style="font-weight:bold;">50期</span>【'
-								res2.data[index].stat.forEach(v => {
-									if (v.willRate > 95) {
-										cStr +=
-											`<span style="color: #e03e2d;margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									} else {
-										cStr +=
-											`<span style="margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									}
-								})
-								cStr += '】<br/>'
-
-								cStr += '<span style="font-weight:bold;">100期</span>【'
-								res3.data[index].stat.forEach(v => {
-									if (v.willRate > 95) {
-										cStr +=
-											`<span style="color: #e03e2d;margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									} else {
-										cStr +=
-											`<span style="margin-right: 10px;">${v.number}(${v.willRate}%)</span>`
-									}
-								})
-								cStr += '】'
-
-								this.text8 +=
-									`<div style="word-break: break-all;">${cStr}</div>`
-							})
+							this.statTable = buildStatTable(res, res2, res3);
 						});
 					});
 				});
@@ -285,40 +248,135 @@
 </script>
 
 <style lang="scss" scoped>
-	input {
-		height: 70upx;
-		border-radius: 10upx;
-		border: 1px solid #aaa;
-		margin-bottom: 20upx;
-		text-align: left;
-		padding: 0 20upx;
+	.container31931 {
+		background: #f0f2f5;
+		min-height: 100vh;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.page-body {
+		padding: 24rpx;
 		box-sizing: border-box;
 	}
 
+	.status-bar {
+		display: flex;
+		align-items: center;
+		padding: 20rpx 24rpx;
+		border-radius: 12rpx;
+		margin-bottom: 24rpx;
+		font-size: 28rpx;
+		font-weight: 500;
+
+		.status-dot {
+			width: 16rpx;
+			height: 16rpx;
+			border-radius: 50%;
+			margin-right: 16rpx;
+		}
+	}
+
+	.status-online {
+		background: rgba(7, 193, 96, 0.1);
+		color: #07c160;
+
+		.status-dot {
+			background: #07c160;
+			box-shadow: 0 0 8rpx rgba(7, 193, 96, 0.5);
+		}
+	}
+
+	.status-offline {
+		background: rgba(255, 77, 79, 0.1);
+		color: #ff4d4f;
+
+		.status-dot {
+			background: #ff4d4f;
+		}
+	}
+
+	.login-card {
+		background: #fff;
+		border-radius: 16rpx;
+		padding: 28rpx;
+		margin-bottom: 24rpx;
+		box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+	}
+
+	.token-input {
+		height: 80rpx;
+		border-radius: 12rpx;
+		border: 1rpx solid #e8e8e8;
+		padding: 0 24rpx;
+		font-size: 28rpx;
+		margin-bottom: 24rpx;
+		box-sizing: border-box;
+		background: #fafafa;
+	}
+
+	.login-btn {
+		border-radius: 12rpx;
+		background: linear-gradient(135deg, #3b8cff, #2563eb);
+		color: #fff;
+		text-align: center;
+		padding: 24rpx;
+		font-size: 30rpx;
+		font-weight: 500;
+	}
+
+	.countdown-card {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16rpx;
+		background: #fff;
+		border-radius: 16rpx;
+		padding: 28rpx;
+		margin-bottom: 24rpx;
+		box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+	}
+
+	.countdown-label {
+		font-size: 28rpx;
+		color: #666;
+	}
+
+	.countdown-value {
+		font-size: 40rpx;
+		font-weight: 700;
+		color: #333;
+	}
+
+	.countdown-urgent {
+		color: #ff4d4f;
+		animation: pulse 1s infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.5; }
+	}
+
 	.flex4-clz {
-		margin-left: 20rpx;
-		border: 2rpx solid #020202;
-		border-bottom-left-radius: 0rpx;
+		margin-left: 0;
+		border: none;
+		border-radius: 16rpx;
 		overflow: hidden;
-		width: calc(100% - 20rpx - 20rpx) !important;
+		width: 100% !important;
 		font-size: 28rpx !important;
-		border-top-left-radius: 0rpx;
-		margin-top: 20rpx;
-		border-top-right-radius: 0rpx;
-		border-bottom-right-radius: 0rpx;
-		margin-bottom: 20rpx;
-		margin-right: 20rpx;
+		margin-top: 0;
+		margin-bottom: 0;
+		margin-right: 0;
+		box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+		background: #fff;
 	}
 
 	.flex8-clz {
-		border-bottom-left-radius: 0rpx;
+		border-bottom: 1rpx solid #eee;
 		overflow: hidden;
 		font-weight: bold;
 		font-size: 28rpx !important;
-		border-top-left-radius: 0rpx;
-		border-top-right-radius: 0rpx;
-		border-bottom-right-radius: 0rpx;
-		border-bottom: 2rpx solid #020202;
 	}
 
 	.flex9-clz {
@@ -350,10 +408,7 @@
 	}
 
 	.flex10-clz {
-		padding-top: 10rpx;
-		padding-left: 10rpx;
-		padding-bottom: 10rpx;
-		padding-right: 10rpx;
+		padding: 20rpx;
 	}
 
 	.flex11-clz {
@@ -476,11 +531,6 @@
 		padding-left: 10rpx;
 		padding-bottom: 10rpx;
 		padding-right: 10rpx;
-	}
-
-	.container31931 {
-		padding-left: 0px;
-		padding-right: 0px;
 	}
 
 	.container31931 {}

@@ -9,7 +9,10 @@
 					<view class="diygw-col-0 text5-clz">(最新100期预测)</view>
 					<button type="primary" @click="getResult">十次预测</button>
 				</view>
-				<rich-text :nodes="text1" class="diygw-col-24 text1-clz text-black"></rich-text>
+				<view class="flex flex-wrap diygw-col-24 flex-direction-column flex10-clz">
+					<view v-if="aiTableMessage" class="empty-text">{{ aiTableMessage }}</view>
+					<result-table v-else :headers="aiTable.headers" :rows="aiTable.rows" minCellWidth="100rpx" />
+				</view>
 			<!-- 	<view class="flex flex-wrap diygw-col-24 flex-direction-column flex10-clz">
 					<p v-for="(item,index) in groupedData" :key="index">{{item}}</p>
 				</view> -->
@@ -19,7 +22,13 @@
 </template>
 
 <script>
+	import { parseCsvText } from '@/common/StringTableParser.js';
+	import ResultTable from '@/components/result-table/result-table.vue';
+
 	export default {
+		components: {
+			ResultTable
+		},
 		data() {
 			return {
 				status: 0,
@@ -27,8 +36,11 @@
 				forecastResult: [],
 				allData: [], // 用于存储所有数据项
 				groupedData: {},
-				text1:'',
-				datastr:''
+				aiTable: {
+					headers: [],
+					rows: []
+				},
+				aiTableMessage: '正在生成',
 			 
 				// 分组后的数据
 			}
@@ -191,7 +203,8 @@
 				uni.showLoading({
 					title: "正在生成"
 				});
-				this.text1 = "正在生成";
+				this.aiTableMessage = '正在生成';
+				this.aiTable = { headers: [], rows: [] };
 				let http_header = {};
 				const http_url = '/cpapi/api/cp/ai'
 				let http_data = {
@@ -201,7 +214,12 @@
 				let res = await this.$http.get(http_url, http_data);
 				
 				if (res.code == 200) { 
-					this.text1 = res.data
+					if (res.data && !String(res.data).includes('停止预测')) {
+						this.aiTable = parseCsvText(res.data);
+						this.aiTableMessage = '';
+					} else {
+						this.aiTableMessage = res.data || '停止预测';
+					}
 					uni.hideLoading();
 						uni.showToast({
 							title: res?.message || '加载成功',
@@ -221,7 +239,7 @@
 					
 
 				} else {
-					this.text1 = res.data+"生成有误...";
+					this.aiTableMessage = (res.data || '') + '生成有误...';
 					uni.showToast({
 						title: res?.message || '请稍后再试',
 						icon: 'error'
@@ -251,11 +269,14 @@
 	}
 
 	.flex10-clz {
-		p {
-			padding: 10rpx;
-			border-bottom: 1rpx solid #f1f1f1;
-			font-size: x-large;
-		}
+		padding: 20rpx;
+	}
+
+	.empty-text {
+		padding: 40rpx 20rpx;
+		text-align: center;
+		font-size: 28rpx;
+		color: #666;
 	}
 
 	.flex8-clz {

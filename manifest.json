@@ -87,7 +87,11 @@
                     "ws" : true,
                     "changeOrigin" : true
                 }
-            }
+            },
+            "https" : false
+        },
+        "router" : {
+            "mode" : "history"
         }
     },
     "vueVersion" : "3"

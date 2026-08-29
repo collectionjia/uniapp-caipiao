@@ -1,16 +1,40 @@
 <template>
 	<view class="container container31931">
-		<u-navbar titleWidth="500" :isFixed="true" :isSlotTitle="true" title="彩票概率预测" backText="返回" backIconColor="#fff" titleColor="inherit" bgColor="green" :backTextStyle="{ color: 'inherit' }" :isHome="true" :isBack="true">
+		<u-navbar titleWidth="500" :isFixed="true" :isSlotTitle="true" title="彩票概率预测" backText="返回" backIconColor="#fff"
+			titleColor="inherit" bgColor="green" :backTextStyle="{ color: 'inherit' }" :isHome="true" :isBack="true">
 			<template v-slot:title> 彩票概率预测 </template>
 		</u-navbar>
-		<view class="flex flex-wrap diygw-col-24 flex-clz">
-			<view class="flex flex-wrap diygw-col-0 flex-direction-column justify-start items-start flex2-clz" @tap="handleFt">
-				<view class="diygw-col-0"> 飞艇 </view>
-				<view class="diygw-col-0 text1-clz"> 48 </view>
+		<view class="page-body">
+			<view class="home-header">
+				<text class="home-title">彩票百分比</text>
+				<text class="home-subtitle">选择彩种，进入赛道概率预测</text>
 			</view>
-			<view class="flex flex-wrap diygw-col-0 flex-direction-column justify-start items-start flex3-clz" @tap="handleSc">
-				<view class="diygw-col-0"> 赛车 </view>
-				<view class="diygw-col-0 text5-clz"> 67 </view>
+			<view class="game-cards">
+				<view class="game-card game-card-ft" @tap="handleFt">
+					<view class="game-card-icon game-card-icon-ft">飞</view>
+					<view class="game-card-main">
+						<view class="game-card-title-row">
+							<text class="game-card-title">飞艇</text>
+							<text class="game-card-badge">类型 48</text>
+						</view>
+						<text class="game-card-desc">极速飞艇 · 赛道概率分析</text>
+					</view>
+					<text class="game-card-enter">进入</text>
+				</view>
+				<view class="game-card game-card-sc" @tap="handleSc">
+					<view class="game-card-icon game-card-icon-sc">赛</view>
+					<view class="game-card-main">
+						<view class="game-card-title-row">
+							<text class="game-card-title">赛车</text>
+							<text class="game-card-badge game-card-badge-sc">类型 67</text>
+						</view>
+						<text class="game-card-desc">幸运赛车 · 赛道概率分析</text>
+					</view>
+					<text class="game-card-enter">进入</text>
+				</view>
+			</view>
+			<view class="home-tip">
+				<text>点击卡片进入对应彩种预测页面</text>
 			</view>
 		</view>
 		<view class="clearfix"></view>
@@ -21,11 +45,8 @@
 	export default {
 		data() {
 			return {
-				//用户全局信息
 				userInfo: {},
-				//页面传参
 				globalOption: {},
-				//自定义全局变量
 				globalData: { logintype: '0', agree: '0' }
 			};
 		},
@@ -39,147 +60,164 @@
 					globalOption: this.getOption(option)
 				});
 			}
-
 			this.init();
 		},
 		methods: {
 			handleFt() {
 				uni.navigateTo({
-					url: '/pages/ft'
-				})
+					url: '/pages/forecast10jieguo'
+				});
 			},
 			handleSc() {
 				uni.navigateTo({
-					url: '/pages/sc'
-				})
+					url: '/pages/forecast10jieguo67'
+				});
 			},
-			async init() {},
-			// 同意或不同意 自定义方法
-			async agreeFunction(param) {
-				let thiz = this;
-				//如果不同意，改为同意
-				this.globalData.agree = this.globalData.agree == '1' ? '0' : '1';
-			},
-
-			// 验证码登录或密码登录 自定义方法
-			async codeFunction(param) {
-				let thiz = this;
-				//如果1表示验证码登录，0表进密码登录
-				this.globalData.logintype = this.globalData.logintype == '1' ? '0' : '1';
-			},
-
-			// 发送短信验证码 自定义方法
-			async sendMsgFunction(param) {
-				let thiz = this;
-				this.formData.codeFlag = false;
-				if (!this.form.phone) {
-					this.showToast('手机号码不能为空');
-					//不给发送验证码
-					this.formData.codeFlag = false;
-					return;
-				}
-				let pattern = /^1[3-9]\d{9}$/;
-				if (!pattern.test(this.form.phone)) {
-					this.showToast('手机号码输入有误');
-					//不给发送验证码
-					this.formData.codeFlag = false;
-					return;
-				}
-				let http_url = '';
-				//配置后可删除下面的判断
-				if (!http_url) {
-					this.showToast('默认发送短信验证地址，配置后可删除此判断');
-					return;
-				}
-				let http_data = {
-					phone: this.form.phone
-				};
-				let http_header = {};
-				let data = await this.$http.post(http_url, http_data, http_header, 'json');
-				if (data.code == 0) {
-					this.showToast(data.msg);
-					return;
-				} else {
-					//修改为true
-					this.formData.codeFlag = true;
-					this.$refs.codeCodeRef.start();
-					this.showToast('验证码已发送');
-				}
-			}
+			async init() {}
 		}
 	};
 </script>
 
 <style lang="scss" scoped>
-	.flex-clz {
-		padding-top: 10rpx;
-		z-index: 100;
-		color: #ffffff;
-		font-weight: bold;
-		padding-left: 10rpx;
-		font-size: 28rpx !important;
-		padding-bottom: 10rpx;
-		height: 160rpx;
-		padding-right: 10rpx;
-	}
-	.flex2-clz {
-		padding-top: 16rpx;
-		border-bottom-left-radius: 12rpx;
-		z-index: 100;
-		background-size: cover;
-		padding-left: 16rpx;
-		padding-bottom: 16rpx;
-		border-top-right-radius: 12rpx;
-		margin-right: 10rpx;
-		margin-left: 10rpx;
-		overflow: hidden;
-		flex: 1;
-		border-top-left-radius: 12rpx;
-		margin-top: 10rpx;
-		border-bottom-right-radius: 12rpx;
-		background-image: url(/static/916f05db-9c0a-4db3-97a6-168e070847c1.png);
-		margin-bottom: 10rpx;
-		padding-right: 16rpx;
-	}
-	.text1-clz {
-		margin-left: 0rpx;
-		color: #e5e5e5;
-		font-size: 22rpx !important;
-		margin-top: 10rpx;
-		margin-bottom: 0rpx;
-		margin-right: 0rpx;
-	}
-	.flex3-clz {
-		padding-top: 16rpx;
-		border-bottom-left-radius: 12rpx;
-		z-index: 100;
-		background-size: cover;
-		padding-left: 16rpx;
-		padding-bottom: 16rpx;
-		border-top-right-radius: 12rpx;
-		margin-right: 10rpx;
-		margin-left: 10rpx;
-		overflow: hidden;
-		flex: 1;
-		border-top-left-radius: 12rpx;
-		margin-top: 10rpx;
-		border-bottom-right-radius: 12rpx;
-		background-image: url(/static/cfe2af9f-9039-49d4-9ab6-47c976712d90.png);
-		margin-bottom: 10rpx;
-		padding-right: 16rpx;
-	}
-	.text5-clz {
-		margin-left: 0rpx;
-		color: #e5e5e5;
-		font-size: 22rpx !important;
-		margin-top: 10rpx;
-		margin-bottom: 0rpx;
-		margin-right: 0rpx;
-	}
 	.container31931 {
-		padding-left: 0px;
-		padding-right: 0px;
+		background: #f0f2f5;
+		min-height: 100vh;
+		padding-left: 0;
+		padding-right: 0;
 	}
-	.container31931 {
+
+	.page-body {
+		padding: 32rpx 24rpx 48rpx;
+		box-sizing: border-box;
+	}
+
+	.home-header {
+		margin-bottom: 36rpx;
+		padding: 8rpx 8rpx 0;
+	}
+
+	.home-title {
+		display: block;
+		font-size: 40rpx;
+		font-weight: 700;
+		color: #1a1a1a;
+		line-height: 1.3;
+		margin-bottom: 12rpx;
+	}
+
+	.home-subtitle {
+		display: block;
+		font-size: 28rpx;
+		color: #888;
+		line-height: 1.4;
+	}
+
+	.game-cards {
+		display: flex;
+		flex-direction: column;
+		gap: 24rpx;
+	}
+
+	.game-card {
+		display: flex;
+		align-items: center;
+		padding: 32rpx 28rpx;
+		border-radius: 20rpx;
+		box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.08);
+		position: relative;
+		overflow: hidden;
+		transition: transform 0.15s ease;
+
+		&:active {
+			transform: scale(0.98);
+		}
+	}
+
+	.game-card-ft {
+		background: linear-gradient(135deg, #07c160 0%, #05a850 100%);
+	}
+
+	.game-card-sc {
+		background: linear-gradient(135deg, #3b8cff 0%, #2563eb 100%);
+	}
+
+	.game-card-icon {
+		width: 96rpx;
+		height: 96rpx;
+		border-radius: 24rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 40rpx;
+		font-weight: 700;
+		color: #fff;
+		flex-shrink: 0;
+		margin-right: 24rpx;
+	}
+
+	.game-card-icon-ft {
+		background: rgba(255, 255, 255, 0.25);
+	}
+
+	.game-card-icon-sc {
+		background: rgba(255, 255, 255, 0.25);
+	}
+
+	.game-card-main {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.game-card-title-row {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12rpx;
+		margin-bottom: 10rpx;
+	}
+
+	.game-card-title {
+		font-size: 36rpx;
+		font-weight: 700;
+		color: #fff;
+		line-height: 1.2;
+	}
+
+	.game-card-badge {
+		font-size: 22rpx;
+		color: rgba(255, 255, 255, 0.95);
+		background: rgba(255, 255, 255, 0.22);
+		padding: 4rpx 16rpx;
+		border-radius: 20rpx;
+		line-height: 1.4;
+	}
+
+	.game-card-badge-sc {
+		background: rgba(255, 255, 255, 0.22);
+	}
+
+	.game-card-desc {
+		font-size: 24rpx;
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.4;
+	}
+
+	.game-card-enter {
+		font-size: 26rpx;
+		color: #fff;
+		font-weight: 600;
+		padding: 12rpx 24rpx;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 32rpx;
+		flex-shrink: 0;
+		margin-left: 16rpx;
+	}
+
+	.home-tip {
+		margin-top: 40rpx;
+		text-align: center;
+		font-size: 24rpx;
+		color: #aaa;
+		line-height: 1.5;
 	}
 </style>
